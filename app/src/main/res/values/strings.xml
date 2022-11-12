@@ -3,6 +3,7 @@
 
     <string name="search_input_label">type something about the product…</string>
     <string name="cep_home_header">Send to: %s</string>
+    <string name="logout_confirmation">Do you want to logout?</string>
 
     <!--  Content Descriptions  -->
     <string name="profile_image_content_description">Profile image</string>
@@ -20,4 +21,7 @@
     <string name="payment_methods">Payment methods</string>
     <string name="notification">Notification</string>
     <string name="logout">Logout</string>
+
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 </resources>

@@ -334,6 +334,31 @@ private fun DrawerItem(
 }
 
 @Composable
+fun LogoutConfirmationDialog(
+    onConfirmCallback: (Boolean) -> Unit
+) {
+    AlertDialog(
+        title = {
+            Text(text = stringResource(id = R.string.logout))
+        },
+        text = {
+            Text(text = stringResource(id = R.string.logout_confirmation))
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirmCallback(true) }) {
+                Text(text = stringResource(id = R.string.confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onConfirmCallback(false) }) {
+                Text(text = stringResource(id = R.string.cancel))
+            }
+        },
+        onDismissRequest = { onConfirmCallback(false) },
+    )
+}
+
+@Composable
 @ExperimentalMaterial3Api
 @Preview
 private fun PreviewHomeAppBar() {
@@ -367,5 +392,13 @@ private fun PreviewHomeProfileDrawer() {
             onNotifications = {},
             onLogout = {},
         )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewLogoutConfirmationDialog() {
+    EcomLabsTheme {
+        LogoutConfirmationDialog(onConfirmCallback = { })
     }
 }

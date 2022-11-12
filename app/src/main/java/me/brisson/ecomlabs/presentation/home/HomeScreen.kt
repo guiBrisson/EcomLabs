@@ -24,7 +24,6 @@ import me.brisson.ecomlabs.util.CurrentUser
 fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
-
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -42,7 +41,7 @@ fun HomeScreen(
                         onPayment = {},
                         onNotifications = {},
                         onLogout = {
-                            // todo: ask if user is sure
+                            //todo: move this to view model
                             scope.launch { drawerState.close() }
                             CurrentUser.logout()
                         }
@@ -92,7 +91,7 @@ private fun HomeContent(
                     scope.launch { drawerState.open() }
                 }
             },
-            onSearch = { },
+            onSearch = {  },
             onShoppingBag = { }
         )
     }
