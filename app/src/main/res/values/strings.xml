@@ -5,6 +5,7 @@
     <string name="cep_home_header">Send to: %s</string>
     <string name="logout_confirmation">Do you want to logout?</string>
     <string name="no_internet_connection">No internet connection</string>
+    <string name="search_appbar_title">Search</string>
 
     <!--  Content Descriptions  -->
     <string name="profile_image_content_description">Profile image</string>
@@ -15,6 +16,7 @@
     <string name="person_icon_content_description">Person icon</string>
     <string name="shopping_icon_content_description">Shopping icon</string>
     <string name="no_wifi_icon_content_description">No Wifi icon</string>
+    <string name="arrow_back_content_description">Arrow back icon</string>
     
     <!--  Home Drawer Items  -->
     <string name="change_account_detail">Change account details</string>
