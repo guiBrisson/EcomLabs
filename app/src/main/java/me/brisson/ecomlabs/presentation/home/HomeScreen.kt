@@ -1,6 +1,7 @@
 package me.brisson.ecomlabs.presentation.home
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -76,10 +77,7 @@ private fun HomeContent(
     drawerState: DrawerState
 ) {
     val context = LocalContext.current
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
+    Column(modifier = modifier.fillMaxSize()) {
         HomeAppBar(
             cep = CEP("12345-123"),
             onSearch = {
@@ -92,6 +90,7 @@ private fun HomeContent(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
+                .background(color = MaterialTheme.colorScheme.background)
         ) {
 
         }

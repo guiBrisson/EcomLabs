@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">ecomlabs</string>
+    <string name="app_name">EcomLabs</string>
 
     <string name="search_input_label">type something about the product…</string>
     <string name="cep_home_header">Send to: %s</string>
     <string name="logout_confirmation">Do you want to logout?</string>
+    <string name="no_internet_connection">No internet connection</string>
 
     <!--  Content Descriptions  -->
     <string name="profile_image_content_description">Profile image</string>
@@ -13,6 +14,7 @@
     <string name="arrow_right_icon_content_description">Arrow right icon</string>
     <string name="person_icon_content_description">Person icon</string>
     <string name="shopping_icon_content_description">Shopping icon</string>
+    <string name="no_wifi_icon_content_description">No Wifi icon</string>
     
     <!--  Home Drawer Items  -->
     <string name="change_account_detail">Change account details</string>

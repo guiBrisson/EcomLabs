@@ -15,10 +15,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -67,8 +70,12 @@ fun HomeAppBar(
 @ExperimentalMaterial3Api
 fun SearchInputText(onSearch: (String) -> Unit) {
     var input by remember { mutableStateOf(TextFieldValue("")) }
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
     TextField(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
         placeholder = {
             Text(
                 text = stringResource(id = R.string.search_input_label),
@@ -91,11 +98,17 @@ fun SearchInputText(onSearch: (String) -> Unit) {
                 Icon(
                     imageVector = Icons.Default.Clear,
                     contentDescription = stringResource(id = R.string.clear_icon_content_description),
-                    modifier = Modifier.clickable { input = TextFieldValue("") }
+                    modifier = Modifier.clickable {
+                        focusManager.clearFocus()
+                        input = TextFieldValue("")
+                    }
                 )
             }
         },
-        keyboardActions = KeyboardActions(onSearch = { onSearch(input.text) }),
+        keyboardActions = KeyboardActions(onSearch = {
+            onSearch(input.text)
+            focusManager.clearFocus()
+        }),
         singleLine = true,
         colors = TextFieldDefaults.textFieldColors(
             textColor = MaterialTheme.colorScheme.onSurface,
