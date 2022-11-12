@@ -175,7 +175,7 @@ fun HomeBottomAppBar(
             modifier = Modifier
                 .clip(RoundedCornerShape(16.dp))
                 .padding(end = 12.dp),
-            onClick = onShoppingBag
+            onClick = onShoppingBag,
         ) {
             Icon(
                 imageVector = Icons.Outlined.ShoppingCart,
@@ -326,7 +326,8 @@ private fun DrawerItem(
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 imageVector = Icons.Default.KeyboardArrowRight,
-                contentDescription = stringResource(id = R.string.arrow_right_icon_content_description)
+                contentDescription = stringResource(id = R.string.arrow_right_icon_content_description),
+                tint = color
             )
         }
     }

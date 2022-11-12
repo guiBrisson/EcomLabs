@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.brisson.ecomlabs.data.model.CEP
@@ -22,10 +25,12 @@ import me.brisson.ecomlabs.util.CurrentUser
 @Composable
 @ExperimentalMaterial3Api
 fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val uiState by viewModel.uiState.collectAsState()
 
     if (CurrentUser.isLoggedIn()) {
         ModalNavigationDrawer(
@@ -40,16 +45,21 @@ fun HomeScreen(
                         onAddress = {},
                         onPayment = {},
                         onNotifications = {},
-                        onLogout = {
-                            //todo: move this to view model
-                            scope.launch { drawerState.close() }
-                            CurrentUser.logout()
-                        }
+                        onLogout =  viewModel::showLogoutConfirmationDialog
                     )
                 }
 
             }
         ) {
+            if (uiState.showLogoutConfirmationDialog) {
+                LogoutConfirmationDialog { confirmed ->
+                    if (confirmed) {
+                        scope.launch { drawerState.close() }
+                        CurrentUser.logout()
+                    }
+                    viewModel.closeLogoutConfirmationDialog()
+                }
+            }
             HomeContent(modifier = modifier, scope = scope, drawerState = drawerState)
         }
     } else {
