@@ -3,42 +3,29 @@ package me.brisson.ecomlabs
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
+import me.brisson.ecomlabs.presentation.home.HomeScreen
 import me.brisson.ecomlabs.ui.theme.EcomLabsTheme
+import me.brisson.ecomlabs.util.ConnectionUtils
+import me.brisson.ecomlabs.util.NoInternetConnectionComponent
 
+@ExperimentalMaterial3Api
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             EcomLabsTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Greeting("Android")
+                Column(modifier = Modifier.fillMaxSize()) {
+                    if(!ConnectionUtils.isOnline(LocalContext.current)){
+                        NoInternetConnectionComponent()
+                    }
+                    HomeScreen()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!", style = MaterialTheme.typography.titleLarge )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    EcomLabsTheme {
-        Greeting("Android")
     }
 }
