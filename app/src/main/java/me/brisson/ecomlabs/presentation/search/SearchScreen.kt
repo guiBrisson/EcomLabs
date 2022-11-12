@@ -14,10 +14,11 @@ import me.brisson.ecomlabs.util.AppTopBar
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
+    onBack: () -> Unit
 ) {
     Scaffold(
         modifier = modifier,
-        topBar = { AppTopBar(onBack = { }) }
+        topBar = { AppTopBar(onBack = onBack) }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
 
@@ -30,6 +31,6 @@ fun SearchScreen(
 @Composable
 private fun PreviewSearchScreen() {
     EcomLabsTheme {
-        SearchScreen()
+        SearchScreen(onBack = { })
     }
 }

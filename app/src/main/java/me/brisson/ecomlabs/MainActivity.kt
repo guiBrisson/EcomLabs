@@ -9,7 +9,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import dagger.hilt.android.AndroidEntryPoint
-import me.brisson.ecomlabs.presentation.home.HomeScreen
 import me.brisson.ecomlabs.ui.theme.EcomLabsTheme
 import me.brisson.ecomlabs.util.ConnectionUtils
 import me.brisson.ecomlabs.util.NoInternetConnectionComponent
@@ -25,7 +24,7 @@ class MainActivity : ComponentActivity() {
                     if(!ConnectionUtils.isOnline(LocalContext.current)){
                         NoInternetConnectionComponent()
                     }
-                    HomeScreen()
+                    AppNavGraph()
                 }
             }
         }
