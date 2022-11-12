@@ -33,11 +33,11 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val uiState by viewModel.uiState.collectAsState()
 
-    if (CurrentUser.isLoggedIn()) {
+    if (uiState.isUserLoggedIn) {
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                CurrentUser()?.let { user ->
+                uiState.currentUser?.let { user ->
                     HomeProfileDrawer(
                         modifier = Modifier.width(DrawerDefaults.MaximumDrawerWidth - 40.dp),
                         user = user,
@@ -56,7 +56,7 @@ fun HomeScreen(
                 LogoutConfirmationDialog { confirmed ->
                     if (confirmed) {
                         scope.launch { drawerState.close() }
-                        CurrentUser.logout()
+                        viewModel.userLogout()
                     }
                     viewModel.closeLogoutConfirmationDialog()
                 }

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import me.brisson.ecomlabs.util.CurrentUser
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +23,13 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     fun closeLogoutConfirmationDialog() {
         _uiState.update {
             it.copy(showLogoutConfirmationDialog = false)
+        }
+    }
+
+    fun userLogout() {
+        CurrentUser.logout()
+        _uiState.update {
+            it.copy(isUserLoggedIn = false)
         }
     }
 }
