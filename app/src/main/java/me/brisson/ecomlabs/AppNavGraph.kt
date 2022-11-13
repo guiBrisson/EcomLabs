@@ -10,7 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import me.brisson.ecomlabs.AppDestinationsArgs.SEARCH_INPUT
+import me.brisson.ecomlabs.AppDestinationsArgs.SEARCH_INPUT_ARGS
 import me.brisson.ecomlabs.presentation.home.HomeScreen
 import me.brisson.ecomlabs.presentation.search.SearchScreen
 
@@ -30,13 +30,15 @@ fun AppNavGraph(
         startDestination = startDestination,
     ) {
         composable(route = AppDestinations.HOME_ROUTE) {
-            HomeScreen(onSearch = { input -> navAction.navigateToSearch(input) })
+            HomeScreen(onSearch = { input ->
+                navAction.navigateToSearch(input)
+            })
         }
 
         composable(
             route = AppDestinations.SEARCH_ROUTE,
             arguments = listOf(
-                navArgument(SEARCH_INPUT) { type = NavType.StringType; defaultValue = "" }
+                navArgument(SEARCH_INPUT_ARGS) { type = NavType.StringType; defaultValue = "" }
             )
         ) {
             SearchScreen(

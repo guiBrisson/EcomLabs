@@ -3,7 +3,7 @@ package me.brisson.ecomlabs
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import me.brisson.ecomlabs.AppDestinations.SEARCH_ROUTE
-import me.brisson.ecomlabs.AppDestinationsArgs.SEARCH_INPUT
+import me.brisson.ecomlabs.AppDestinationsArgs.SEARCH_INPUT_ARGS
 import me.brisson.ecomlabs.AppScreens.HOME_SCREEN
 import me.brisson.ecomlabs.AppScreens.SEARCH_SCREEN
 
@@ -13,22 +13,22 @@ private object AppScreens {
 }
 
 object AppDestinationsArgs {
-    const val SEARCH_INPUT = "search_input"
+    const val SEARCH_INPUT_ARGS = "search_input"
 }
 
 object AppDestinations {
     const val HOME_ROUTE = HOME_SCREEN
-    const val SEARCH_ROUTE = "$SEARCH_SCREEN/{${SEARCH_INPUT}}"
+    const val SEARCH_ROUTE = "$SEARCH_SCREEN/{${SEARCH_INPUT_ARGS}}"
 }
 
 class AppNavigationActions(private val navController: NavHostController) {
 
     fun navigateToSearch(search_input: String) {
-        val route =
-            if (search_input.isEmpty()) SEARCH_ROUTE
-            else "$SEARCH_SCREEN/$search_input"
-
-        navController.navigate(route) {
+        navController.navigate(
+            SEARCH_ROUTE.let {
+                if (search_input.isNotEmpty()) "$it?$SEARCH_INPUT_ARGS=$search_input" else it
+            }
+        ) {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
             }
