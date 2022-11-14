@@ -39,7 +39,7 @@ val Typography = Typography(
     titleLarge = TextStyle(
         fontFamily = openSans,
         fontWeight = FontWeight.Normal,
-        fontSize = 22.sp
+        fontSize = 20.sp
     ),
     bodySmall = TextStyle(
         fontFamily = openSans,

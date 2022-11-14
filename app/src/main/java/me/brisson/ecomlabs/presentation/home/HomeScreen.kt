@@ -27,7 +27,8 @@ import me.brisson.ecomlabs.util.CurrentUser
 @ExperimentalMaterial3Api
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel(),
+    onSearch: (String) -> Unit
 ) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -46,7 +47,7 @@ fun HomeScreen(
                         onAddress = {},
                         onPayment = {},
                         onNotifications = {},
-                        onLogout =  viewModel::showLogoutConfirmationDialog
+                        onLogout = viewModel::showLogoutConfirmationDialog
                     )
                 }
 
@@ -61,10 +62,20 @@ fun HomeScreen(
                     viewModel.closeLogoutConfirmationDialog()
                 }
             }
-            HomeContent(modifier = modifier, scope = scope, drawerState = drawerState)
+            HomeContent(
+                modifier = modifier,
+                scope = scope,
+                drawerState = drawerState,
+                onSearch = onSearch
+            )
         }
     } else {
-        HomeContent(modifier = modifier, scope = scope, drawerState = drawerState)
+        HomeContent(
+            modifier = modifier,
+            scope = scope,
+            drawerState = drawerState,
+            onSearch = onSearch
+        )
     }
 
 }
@@ -74,15 +85,15 @@ fun HomeScreen(
 private fun HomeContent(
     modifier: Modifier = Modifier,
     scope: CoroutineScope,
-    drawerState: DrawerState
+    drawerState: DrawerState,
+    onSearch: (String) -> Unit
 ) {
     val context = LocalContext.current
     Column(modifier = modifier.fillMaxSize()) {
         HomeAppBar(
             cep = CEP("12345-123"),
-            onSearch = {
-                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-            }, onCep = {
+            onSearch = onSearch,
+            onCep = {
                 Toast.makeText(context, it.value, Toast.LENGTH_SHORT).show()
             }
         )
@@ -100,7 +111,7 @@ private fun HomeContent(
                     scope.launch { drawerState.open() }
                 }
             },
-            onSearch = {  },
+            onSearch = { onSearch("") },
             onShoppingBag = { }
         )
     }
@@ -111,7 +122,7 @@ private fun HomeContent(
 @Preview
 private fun PreviewHomeScreen() {
     EcomLabsTheme {
-        HomeScreen()
+        HomeScreen(onSearch = { })
     }
 }
 
