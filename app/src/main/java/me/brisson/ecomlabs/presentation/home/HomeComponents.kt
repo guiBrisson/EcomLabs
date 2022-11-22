@@ -23,11 +23,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import me.brisson.ecomlabs.R
-import me.brisson.ecomlabs.data.model.CEP
-import me.brisson.ecomlabs.data.model.User
-import me.brisson.ecomlabs.data.model.mockedUser
+import me.brisson.ecomlabs.data.model.*
 import me.brisson.ecomlabs.ui.theme.EcomLabsTheme
+import me.brisson.ecomlabs.util.HorizontalProduct
 import me.brisson.ecomlabs.util.SearchInputText
+import java.math.BigDecimal
 
 @Composable
 @ExperimentalMaterial3Api
@@ -43,15 +43,13 @@ fun HomeAppBar(
             .background(color = MaterialTheme.colorScheme.secondary)
             .padding(
                 top = 20.dp,
-                start = 20.dp,
-                end = 20.dp,
                 bottom = 10.dp
             )
     ) {
-        SearchInputText(onSearch = onSearch)
+        SearchInputText(modifier = Modifier.padding(horizontal = 20.dp), onSearch = onSearch)
         cep?.let { CEP ->
             CEPComponent(
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = 8.dp, start = 10.dp, end = 10.dp),
                 cep = CEP,
                 onClick = onCep
             )
@@ -71,7 +69,8 @@ fun CEPComponent(
         modifier = modifier
             .fillMaxWidth()
             .clip(CircleShape)
-            .clickable { onClick(cep) },
+            .clickable { onClick(cep) }
+            .padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -313,6 +312,44 @@ fun LogoutConfirmationDialog(
 }
 
 @Composable
+fun ProductListTitle(modifier: Modifier = Modifier, title: String, onArrow: () -> Unit) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = title, style = MaterialTheme.typography.titleMedium)
+        IconButton(onClick = onArrow) {
+            Icon(
+                imageVector = Icons.Default.KeyboardArrowRight,
+                contentDescription = stringResource(id = R.string.arrow_right_icon_content_description)
+            )
+        }
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+fun ProductList(
+    modifier: Modifier = Modifier,
+    product: Product,
+    type: ProductComponentType,
+    onProduct: () -> Unit
+) {
+    when (type) {
+        ProductComponentType.HORIZONTAL -> {
+            HorizontalProduct(
+                modifier = modifier,
+                product = product,
+                onClick = onProduct
+            )
+        }
+        ProductComponentType.VERTICAL -> {}
+        ProductComponentType.BIG -> {}
+    }
+}
+
+@Composable
 @ExperimentalMaterial3Api
 @Preview
 private fun PreviewHomeAppBar() {
@@ -346,6 +383,32 @@ private fun PreviewHomeProfileDrawer() {
             onNotifications = {},
             onLogout = {},
         )
+    }
+}
+
+@ExperimentalMaterial3Api
+@Preview(showBackground = true)
+@Composable
+fun PreviewProductList() {
+    EcomLabsTheme {
+        Column {
+            ProductListTitle(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                title = "title one two",
+                onArrow = { })
+            ProductList(
+                product = Product(
+                    name = "nome",
+                    image = "",
+                    currentPrice = BigDecimal(200),
+                    oldPrices = listOf(BigDecimal(250))
+                ),
+                type = ProductComponentType.HORIZONTAL,
+                onProduct = { }
+            )
+        }
     }
 }
 

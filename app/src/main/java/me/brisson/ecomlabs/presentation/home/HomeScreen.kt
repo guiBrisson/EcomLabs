@@ -1,12 +1,9 @@
 package me.brisson.ecomlabs.presentation.home
 
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -20,6 +17,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import me.brisson.ecomlabs.data.model.CEP
+import me.brisson.ecomlabs.data.model.Product
+import me.brisson.ecomlabs.data.model.ProductsList
 import me.brisson.ecomlabs.ui.theme.EcomLabsTheme
 import me.brisson.ecomlabs.util.CurrentUser
 
@@ -66,7 +65,9 @@ fun HomeScreen(
                 modifier = modifier,
                 scope = scope,
                 drawerState = drawerState,
-                onSearch = onSearch
+                onSearch = onSearch,
+                productLists = uiState.productLists,
+                onProduct = { }
             )
         }
     } else {
@@ -74,7 +75,9 @@ fun HomeScreen(
             modifier = modifier,
             scope = scope,
             drawerState = drawerState,
-            onSearch = onSearch
+            onSearch = onSearch,
+            productLists = uiState.productLists,
+            onProduct = { }
         )
     }
 
@@ -86,40 +89,63 @@ private fun HomeContent(
     modifier: Modifier = Modifier,
     scope: CoroutineScope,
     drawerState: DrawerState,
-    onSearch: (String) -> Unit
+    onSearch: (String) -> Unit,
+    productLists: List<ProductsList>,
+    onProduct: (Product) -> Unit
 ) {
     val context = LocalContext.current
-    Column(modifier = modifier.fillMaxSize()) {
-        HomeAppBar(
-            cep = CEP("12345-123"),
-            onSearch = onSearch,
-            onCep = {
-                Toast.makeText(context, it.value, Toast.LENGTH_SHORT).show()
-            }
-        )
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .background(color = MaterialTheme.colorScheme.background)
-        ) {
-
-        }
-        HomeBottomAppBar(
-            onProfile = {
-                if (CurrentUser.isLoggedIn()) {
-                    scope.launch { drawerState.open() }
+    Scaffold(
+        topBar = {
+            HomeAppBar(
+                cep = CEP("12345-123"),
+                onSearch = onSearch,
+                onCep = {
+                    Toast.makeText(context, it.value, Toast.LENGTH_SHORT).show()
                 }
-            },
-            onSearch = { onSearch("") },
-            onShoppingBag = { }
-        )
+            )
+        },
+        bottomBar = {
+            HomeBottomAppBar(
+                onProfile = {
+                    if (CurrentUser.isLoggedIn()) {
+                        scope.launch { drawerState.open() }
+                    }
+                },
+                onSearch = { onSearch("") },
+                onShoppingBag = { }
+            )
+        }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+        ) {
+            for (list in productLists) {
+                item {
+                    ProductListTitle(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                        list.title,
+                        onArrow = { })
+                }
+                items(list.products) { product ->
+                    ProductList(
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp),
+                        product = product,
+                        onProduct = { onProduct(product) },
+                        type = list.componentType
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
 @ExperimentalMaterial3Api
-@Preview
+@Preview(showBackground = true)
 private fun PreviewHomeScreen() {
     EcomLabsTheme {
         HomeScreen(onSearch = { })
