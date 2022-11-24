@@ -3,6 +3,11 @@ package me.brisson.ecomlabs.presentation.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,6 +32,7 @@ import me.brisson.ecomlabs.data.model.*
 import me.brisson.ecomlabs.ui.theme.EcomLabsTheme
 import me.brisson.ecomlabs.util.HorizontalProduct
 import me.brisson.ecomlabs.util.SearchInputText
+import me.brisson.ecomlabs.util.VerticalProduct
 import java.math.BigDecimal
 
 @Composable
@@ -321,7 +327,7 @@ fun ProductListTitle(modifier: Modifier = Modifier, title: String, onArrow: () -
         Text(text = title, style = MaterialTheme.typography.titleMedium)
         IconButton(onClick = onArrow) {
             Icon(
-                imageVector = Icons.Default.KeyboardArrowRight,
+                imageVector = Icons.Default.ArrowForward,
                 contentDescription = stringResource(id = R.string.arrow_right_icon_content_description)
             )
         }
@@ -338,27 +344,107 @@ fun ProductList(
 ) {
     when (type) {
         ProductComponentType.HORIZONTAL -> {
-            HorizontalProduct(
+
+        }
+        ProductComponentType.VERTICAL -> {
+            VerticalProduct(
                 modifier = modifier,
                 product = product,
                 onClick = onProduct
             )
         }
-        ProductComponentType.VERTICAL -> {}
         ProductComponentType.BIG -> {}
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+fun List(
+    productLists: List<ProductsList>,
+    onProduct: (Product) -> Unit
+) {
+    for (list in productLists) {
+        when (list.componentType) {
+            ProductComponentType.HORIZONTAL -> {
+                HorizontalProductList(list = list, onProduct = onProduct)
+            }
+            ProductComponentType.VERTICAL -> {
+                VerticalProductList(list = list, onProduct = onProduct)
+            }
+            ProductComponentType.BIG -> {}
+        }
+
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+private fun HorizontalProductList(
+    modifier: Modifier = Modifier,
+    list: ProductsList,
+    onProduct: (Product) -> Unit
+) {
+    LazyColumn(modifier = modifier) {
+        item {
+            ProductListTitle(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                title = list.title,
+                onArrow = { })
+        }
+        items(list.products) { product ->
+            HorizontalProduct(
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp),
+                product = product,
+                onClick = { onProduct(product) }
+            )
+        }
+    }
+}
+
+@ExperimentalMaterial3Api
+@Composable
+fun VerticalProductList(
+    modifier: Modifier = Modifier,
+    list: ProductsList,
+    onProduct: (Product) -> Unit
+) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        ProductListTitle(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            title = list.title,
+            onArrow = { }
+        )
+
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(horizontal = 20.dp)
+        ) {
+
+            items(list.products) { product ->
+                VerticalProduct(
+                    modifier = Modifier.padding(6.dp),
+                    product = product,
+                    onClick = { onProduct(product) }
+                )
+            }
+        }
     }
 }
 
 @Composable
 @ExperimentalMaterial3Api
-@Preview
+@Preview(group = "appbars")
 private fun PreviewHomeAppBar() {
     EcomLabsTheme {
         HomeAppBar(cep = CEP("12345-123"), onCep = { }, onSearch = { })
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, group = "appbars")
 @Composable
 private fun PreviewHomeBottomAppBar() {
     EcomLabsTheme {
@@ -417,5 +503,17 @@ fun PreviewProductList() {
 private fun PreviewLogoutConfirmationDialog() {
     EcomLabsTheme {
         LogoutConfirmationDialog(onConfirmCallback = { })
+    }
+}
+
+@ExperimentalMaterial3Api
+@Preview(showBackground = true)
+@Composable
+private fun PreviewVerticalProductList() {
+    EcomLabsTheme {
+        VerticalProductList(
+            list = mockedProductVerticalList,
+            onProduct = {  }
+        )
     }
 }

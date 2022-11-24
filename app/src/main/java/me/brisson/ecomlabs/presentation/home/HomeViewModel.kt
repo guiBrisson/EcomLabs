@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import me.brisson.ecomlabs.data.model.ProductsList
-import me.brisson.ecomlabs.data.model.mockedProductList
+import me.brisson.ecomlabs.data.model.mockedProductHorizontalList
+import me.brisson.ecomlabs.data.model.mockedProductVerticalList
 import me.brisson.ecomlabs.util.CurrentUser
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 
     init {
         _uiState.update {
-            it.copy(productLists = listOf(mockedProductList))
+            it.copy(productLists = listOf(mockedProductHorizontalList, mockedProductVerticalList))
         }
     }
 

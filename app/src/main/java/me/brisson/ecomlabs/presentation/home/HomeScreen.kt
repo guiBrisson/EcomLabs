@@ -1,9 +1,10 @@
 package me.brisson.ecomlabs.presentation.home
 
 import android.widget.Toast
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -116,29 +117,15 @@ private fun HomeContent(
             )
         }
     ) { paddingValues ->
-        LazyColumn(
+        Column(
             modifier = modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
         ) {
-            for (list in productLists) {
-                item {
-                    ProductListTitle(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp),
-                        list.title,
-                        onArrow = { })
-                }
-                items(list.products) { product ->
-                    ProductList(
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 6.dp),
-                        product = product,
-                        onProduct = { onProduct(product) },
-                        type = list.componentType
-                    )
-                }
-            }
+            List(
+                productLists = productLists,
+                onProduct = onProduct
+            )
         }
     }
 }

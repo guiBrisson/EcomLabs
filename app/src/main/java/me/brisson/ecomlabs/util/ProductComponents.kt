@@ -107,17 +107,21 @@ fun VerticalProduct(
     onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier.width(150.dp),
+        modifier = modifier.height(230.dp),
         shape = RoundedCornerShape(18.dp),
         elevation = CardDefaults.elevatedCardElevation(),
         colors = CardDefaults.elevatedCardColors(),
         onClick = onClick
     ) {
         Column(
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface)
+            modifier = Modifier
+                .fillMaxHeight()
+                .background(color = MaterialTheme.colorScheme.surface),
         ) {
             SubcomposeAsyncImage(
-                modifier = Modifier.fillMaxWidth().height(125.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(125.dp),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(product.image)
                     .crossfade(true)
@@ -127,37 +131,45 @@ fun VerticalProduct(
                 contentScale = ContentScale.Crop,
                 alignment = Alignment.Center
             )
-            Text(
-                modifier = Modifier,
-                text = product.name,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.SpaceEvenly
+            Column(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.SpaceAround
             ) {
                 Text(
-                    text = "$ ${product.currentPrice}",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface
+                    modifier = Modifier,
+                    text = product.name,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                 )
-                product.oldPrices?.let {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Start
+                ) {
                     Text(
-                        modifier = Modifier.padding(start = 6.dp),
-                        text = "$ ${product.oldPrices.first()}",
-                        style = TextStyle(
-                            fontFamily = openSans,
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Normal,
-                            lineHeight = 20.sp,
-                            color = MaterialTheme.colorScheme.outline,
-                            textDecoration = TextDecoration.LineThrough,
-                        ),
+                        text = "$ ${product.currentPrice}",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
+                    product.oldPrices?.let {
+                        Text(
+                            modifier = Modifier.padding(start = 6.dp),
+                            text = "$ ${product.oldPrices.first()}",
+                            style = TextStyle(
+                                fontFamily = openSans,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Normal,
+                                lineHeight = 20.sp,
+                                color = MaterialTheme.colorScheme.outline,
+                                textDecoration = TextDecoration.LineThrough,
+                            ),
+                        )
+                    }
                 }
             }
         }
